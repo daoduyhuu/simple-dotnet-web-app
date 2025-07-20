@@ -30,5 +30,15 @@ pipeline {
                 }
             }
         }
+		stage('Deploy') {
+			steps {
+				sh '''
+					docker build -t simplewebapi:latest .
+					docker stop simplewebapi || true
+					docker rm simplewebapi || true
+					docker run -d --name simplewebapi -p 5000:80 simplewebapi:latest
+				'''
+			}
+		}
     }
 }
