@@ -2,17 +2,18 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution and project files first
+# Copy all .csproj files for all projects referenced in the solution
 COPY SimpleWebApi/*.csproj ./SimpleWebApi/
+COPY SimpleWebApi.Test/*.csproj ./SimpleWebApi.Test/
 COPY *.sln ./
 
 # Restore dependencies
 RUN dotnet restore
 
-# Copy the rest of the source code
+# Copy everything else (code, tests, configs, etc.)
 COPY . .
 
-# Build and publish
+# Build and publish the main app (not test project)
 WORKDIR /src/SimpleWebApi
 RUN dotnet publish -c Release -o /app/publish --no-restore
 
@@ -22,8 +23,6 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-# Optional: expose port (adjust based on your app's settings)
 EXPOSE 80
 
-# Entry point
 ENTRYPOINT ["dotnet", "SimpleWebApi.dll"]
