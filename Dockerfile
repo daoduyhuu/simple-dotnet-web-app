@@ -18,7 +18,7 @@ COPY . .
 
 # Build and publish the main app (not test project)
 WORKDIR /src/SimpleWebApi
-RUN dotnet publish -c Release -o /app/publish --no-restore
+RUN dotnet publish -c Release -o /app/publish
 
 # ----------- STAGE 2: Runtime -------------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
