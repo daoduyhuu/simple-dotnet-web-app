@@ -4,6 +4,12 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
+		stage('Check Docker') {
+            steps {
+                sh 'docker ps -a'
+                sh 'docker images'
+            }
+        }
         stage('Build') { 
             steps {
                 sh 'dotnet restore' 
