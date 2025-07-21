@@ -13,6 +13,9 @@ RUN dotnet restore
 # Copy everything else (code, tests, configs, etc.)
 COPY . .
 
+# Optional: Clear NuGet cache to prevent stale package issues
+# RUN dotnet nuget locals all --clear
+
 # Build and publish the main app (not test project)
 WORKDIR /src/SimpleWebApi
 RUN dotnet publish -c Release -o /app/publish --no-restore
