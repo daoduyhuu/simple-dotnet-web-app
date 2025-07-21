@@ -26,6 +26,6 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-EXPOSE 80
+EXPOSE 8888
 
 ENTRYPOINT ["dotnet", "SimpleWebApi.dll"]

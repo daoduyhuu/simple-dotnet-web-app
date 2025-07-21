@@ -27,7 +27,7 @@ pipeline {
 					docker build -t simplewebapi:latest .
 					docker stop simplewebapi || true
 					docker rm simplewebapi || true
-					docker run -d --name simplewebapi -p 5000:80 simplewebapi:latest
+					docker run -d --name simplewebapi -p 5555:8888 simplewebapi:latest
 				'''
 			}
 		}
