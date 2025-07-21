@@ -21,16 +21,6 @@ pipeline {
                 sh 'dotnet test --no-build --no-restore'
             }
         }
-		stage('Deliver') {
-            steps {
-                sh 'dotnet publish SimpleWebApi --no-restore -o published'
-            }
-            post {
-                success {
-                    archiveArtifacts 'published/*.*'
-                }
-            }
-        }
 		stage('Deploy') {
 			steps {
 				sh '''
