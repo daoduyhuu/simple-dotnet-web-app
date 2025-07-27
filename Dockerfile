@@ -1,31 +1,27 @@
-# ----------- STAGE 1: Build & Publish -------------
+# 1. Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy all .csproj files for all projects referenced in the solution
-COPY SimpleWebApi/*.csproj ./SimpleWebApi/
-COPY SimpleWebApi.Test/*.csproj ./SimpleWebApi.Test/
-COPY *.sln ./
+# Copy solution and project files
+COPY simple-dotnet-web-app.sln ./
+COPY SimpleWebApi/SimpleWebApi.csproj SimpleWebApi/
+COPY SimpleWebApi.Test/SimpleWebApi.Test.csproj SimpleWebApi.Test/
 
-# Restore dependencies
-RUN dotnet restore
+# Restore all projects in the solution
+RUN dotnet restore simple-dotnet-web-app.sln
 
-# Copy everything else (code, tests, configs, etc.)
-COPY . .
+# Copy all source files
+COPY SimpleWebApi/. SimpleWebApi/
+COPY SimpleWebApi.Test/. SimpleWebApi.Test/
 
-# Optional: Clear NuGet cache to prevent stale package issues
-# RUN dotnet nuget locals all --clear
-
-# Build and publish the main app (not test project)
+# Build and publish the main app
 WORKDIR /src/SimpleWebApi
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/out
 
-# ----------- STAGE 2: Runtime -------------
+# 2. Runtime stage (only app code, not test code)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
+COPY --from=build /app/out ./
 
-COPY --from=build /app/publish .
-
-EXPOSE 8888
-
+EXPOSE 80
 ENTRYPOINT ["dotnet", "SimpleWebApi.dll"]
