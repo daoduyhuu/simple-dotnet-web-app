@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/dotnet/sdk:8.0'
-            args '--privileged' // May be needed for some operations, but use with caution
-        }
-    }
+    agent any
     stages {
         stage('Build') { 
             steps {
