@@ -27,5 +27,9 @@ pipeline {
                 }
             }
         }
+		stage('Done') 
+		{
+			sh 'echo hello, it's completed'
+		}
     }
 }
